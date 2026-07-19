@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rabbani Spirit Quest - SMP IT Bina Insani Kediri</title>
+    <!-- Tailwind CSS for responsive framework utility -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        questPrimary: '#0F4C5C',
+                        questSecondary: '#E3A857',
+                        questDark: '#0B3945',
+                        questLight: '#1B6B7F',
+                        questBg: '#F4F7F6',
+                        gameGreen: '#10B981',
+                        gameRed: '#EF4444'
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        game: ['"Poppins"', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .quest-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .quest-card:hover {
+            transform: translateY(-2px);
+        }
+        .glowing-btn {
+            box-shadow: 0 0 15px rgba(227, 168, 87, 0.4);
+        }
+        .glowing-btn:hover {
+            box-shadow: 0 0 25px rgba(227, 168, 87, 0.7);
+        }
+        .pulse-slow {
+            animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .7; }
+        }
+    </style>
+</head>
+<body class="bg-questBg font-sans text-slate-800 min-h-screen pb-12 selection:bg-questSecondary selection:text-questDark">
+
+    <!-- TOP NAVBAR & PORTAL TOGGLER -->
+    <nav class="bg-questDark text-white py-4 px-6 md:px-12 sticky top-0 z-40 border-b border-white/10 shadow-md">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <span class="w-10 h-10 rounded-xl bg-questSecondary flex items-center justify-center text-questDark font-extrabold text-xl shadow-lg">
+                    <i class="fa-solid fa-mosque"></i>
+                </span>
+                <div>
+                    <h1 class="text-sm md:text-base font-bold font-game tracking-tight leading-tight">SMP IT Bina Insani</h1>
+                    <p class="text-[10px] text-teal-200 tracking-wider">KEDIRI • GENERASI RABBANI</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2">
+                <!-- Teacher Portal Button -->
+                <button onclick="toggleTeacherPortal()" class="bg-questSecondary hover:bg-yellow-500 text-questDark px-4 py-2 rounded-xl text-xs font-extrabold tracking-wider transition-all flex items-center gap-2 shadow-md">
+                    <i class="fa-solid fa-chalkboard-user"></i> <span>PORTAL USTAZ / USTAZAH</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <header class="bg-gradient-to-r from-questPrimary to-questLight text-white relative overflow-hidden py-12 px-4 md:px-8 border-b-4 border-questSecondary shadow-xl">
+        <div class="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+        
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 relative z-10">
+            <div class="text-center md:text-left">
+                <div class="inline-flex items-center gap-2 bg-questSecondary/20 border border-questSecondary/40 text-questSecondary px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-3">
+                    <i class="fa-solid fa-circle-nodes animate-pulse"></i> Rabbani Spirit Quest v2.0
+                </div>
+                <h1 class="text-3xl md:text-5xl font-extrabold font-game tracking-tight text-white leading-tight">
+                    Set Your Spirit Target,<br> <span class="text-questSecondary">Level Up Your Soul!</span>
+                </h1>
+                <p class="text-teal-100 text-xs md:text-sm mt-3 max-w-xl leading-relaxed">
+                    Hai Pejuang Rabbani! Ibadah harian adalah pengisi energi jiwamu agar senantiasa sehat, cerdas, dan dilingkupi petunjuk Allah. Yuk input capaian ibadahmu sepekan ini!
+                </p>
+            </div>
+            
+            <!-- Student Widget -->
+            <div class="bg-questDark/70 backdrop-blur-md border border-white/10 rounded-2xl p-6 w-full md:w-80 shadow-2xl">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-12 h-12 rounded-full bg-questSecondary flex items-center justify-center text-questDark text-2xl font-bold flex-shrink-0">
+                        <i class="fa-solid fa-user-ninja"></i>
+                    </div>
+                    <div class="flex-grow space-y-2">
+                        <input type="text" id="player-name-input" oninput="updatePlayerName()" placeholder="Nama Siswa..." class="bg-white/10 border border-white/20 text-white font-bold rounded-lg px-2.5 py-1 text-sm focus:outline-none focus:border-questSecondary w-full placeholder-teal-200/50">
+                        
+                        <div class="grid grid-cols-2 gap-2">
+                            <!-- Class Dropdown selection -->
+                            <select id="player-class-select" onchange="updatePlayerClass()" class="bg-white/10 border border-white/20 text-white font-bold rounded-lg px-2 py-1 text-xs focus:outline-none focus:border-questSecondary w-full cursor-pointer">
+                                <option value="" class="text-slate-800" disabled selected>Pilih Kelas</option>
+                                <option value="VII - A" class="text-slate-800">VII - A</option>
+                                <option value="VII - B" class="text-slate-800">VII - B</option>
+                                <option value="VIII - A" class="text-slate-800">VIII - A</option>
+                                <option value="VIII - B" class="text-slate-800">VIII - B</option>
+                                <option value="IX - A" class="text-slate-800">IX - A</option>
+                                <option value="IX - B" class="text-slate-800">IX - B</option>
+                            </select>
+                            
+                            <!-- Week selection -->
+                            <select id="recap-week-select" onchange="updateRecapWeek()" class="bg-white/10 border border-white/20 text-white font-bold rounded-lg px-2 py-1 text-xs focus:outline-none focus:border-questSecondary w-full cursor-pointer">
+                                <option value="Pekan 1" class="text-slate-800" selected>Pekan 1</option>
+                                <option value="Pekan 2" class="text-slate-800">Pekan 2</option>
+                                <option value="Pekan 3" class="text-slate-800">Pekan 3</option>
+                                <option value="Pekan 4" class="text-slate-800">Pekan 4</option>
+                                <option value="Pekan 5" class="text-slate-800">Pekan 5</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Date selection -->
+                        <div class="relative">
+                            <span class="absolute right-2 top-1 text-[8px] text-teal-200 uppercase font-semibold pointer-events-none">Tanggal Log</span>
+                            <input type="date" id="recap-date-input" onchange="updateRecapDate()" class="bg-white/10 border border-white/20 text-white font-bold rounded-lg px-2.5 py-1 text-xs focus:outline-none focus:border-questSecondary w-full cursor-pointer">
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <div class="flex justify-between text-xs font-semibold text-teal-100">
+                        <span>SPIRIT BATTERY LEVEL</span>
+                        <span id="spirit-level-text">WARRIOR (10%)</span>
+                    </div>
+                    <div class="h-3 bg-white/10 rounded-full overflow-hidden p-0.5 border border-white/5">
+                        <div id="spirit-progress-bar" class="h-full bg-gradient-to-r from-gameRed via-yellow-400 to-gameGreen rounded-full transition-all duration-500" style="width: 10%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN INTERACTIVE HUB -->
+    <main class="max-w-6xl mx-auto px-4 mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- LEFT COLUMN: SPIRITUAL COUNTERS & TRACKING (7 COLS) -->
+        <section class="lg:col-span-7 flex flex-col gap-6">
+            
+            <!-- THE BATTERY INTERACTIVE BOX -->
+            <div class="bg-white rounded-3xl shadow-xl border border-slate-100 p-6 md:p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h2 class="text-xl md:text-2xl font-bold text-questPrimary font-game flex items-center gap-2">
+                            <i class="fa-solid fa-battery-three-quarters text-questSecondary"></i> Charger Jiwa Pejuang
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-1">Masukkan jumlah ibadah yang sudah kamu lakukan sepekan ini dengan menekan tombol angka yang sesuai.</p>
+                    </div>
+                    <button onclick="resetCounters()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold px-3 py-1.5 rounded-lg transition-all flex items-center gap-1">
+                        <i class="fa-solid fa-rotate-left"></i> <span>Reset Semua</span>
+                    </button>
+                </div>
+                
+                <!-- Dynamic Soul Status Report -->
+                <div class="bg-gradient-to-b from-slate-50 to-slate-100/50 border border-slate-200/60 rounded-2xl p-6 flex flex-col md:flex-row items-center gap-6 justify-between relative overflow-hidden mb-8">
+                    <div class="flex items-center relative w-full max-w-[240px] md:w-48 h-28 bg-slate-200 rounded-2xl p-2 border-2 border-slate-300">
+                        <div id="sim-battery-bar" class="h-full bg-gradient-to-r from-gameRed to-orange-500 rounded-xl transition-all duration-500 flex items-center justify-center font-bold text-white text-base drop-shadow-md" style="width: 10%;">
+                            <span id="sim-pct">10%</span>
+                        </div>
+                        <div class="absolute right-[-10px] top-1/2 -translate-y-1/2 w-2.5 h-10 bg-slate-300 rounded-r-lg"></div>
+                    </div>
+
+                    <div class="flex-grow bg-white border border-slate-100 p-4 rounded-xl min-h-[120px] flex flex-col justify-between">
+                        <div>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">STATUS RUHIYAH:</span>
+                            <h3 id="sim-status-title" class="font-bold text-gameRed text-lg font-game">Jiwa Remaja Low-Bat</h3>
+                            <p id="sim-status-desc" class="text-xs text-slate-600 mt-1">Sering lelah belajar, gampang emosi, hampa, cemas berlebihan. Butuh segera dicolok ke charger iman!</p>
+                        </div>
+                        <div id="sim-status-buff" class="mt-3 p-2 rounded-lg bg-red-50 border border-red-100/50 text-[11px] text-gameRed font-semibold flex items-center gap-1.5">
+                            <i class="fa-solid fa-bolt-lightning animate-bounce"></i> Tekan tombol ibadah di bawah untuk mengisi daya!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INPUT FORM: NUMERIC SELECTION BADGES -->
+                <div class="space-y-6">
+                    
+                    <!-- 1. Dzikir Al-Ma'tsurat -->
+                    <div class="border border-slate-100 bg-slate-50/50 rounded-2xl p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-extrabold text-questPrimary uppercase tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-shield text-questSecondary"></i> 1. Dzikir Al-Ma'tsurat
+                            </span>
+                            <span class="text-xs font-bold text-slate-500">Target: <strong class="text-questPrimary">7x / Pekan</strong></span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 mb-3">Menenangkan hati dan perisai jiwa menghadapi aktivitas belajar harian.</p>
+                        <div class="flex flex-wrap gap-1.5" id="btn-group-matsurat">
+                            <!-- Populated Dynamically with 0-7 buttons -->
+                        </div>
+                    </div>
+
+                    <!-- 2. Shalat Dhuha -->
+                    <div class="border border-slate-100 bg-slate-50/50 rounded-2xl p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-extrabold text-questPrimary uppercase tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-sun text-questSecondary"></i> 2. Shalat Dhuha
+                            </span>
+                            <span class="text-xs font-bold text-slate-500">Target: <strong class="text-questPrimary">7x / Pekan</strong></span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 mb-3">Membuka pintu berkah, melancarkan kecerdasan berpikir dan kelapangan rezeki.</p>
+                        <div class="flex flex-wrap gap-1.5" id="btn-group-dhuha">
+                            <!-- Populated Dynamically with 0-7 buttons -->
+                        </div>
+                    </div>
+
+                    <!-- 3. Shalat Qobliyah & Ba'diyah -->
+                    <div class="border border-slate-100 bg-slate-50/50 rounded-2xl p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-extrabold text-questPrimary uppercase tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-circle-plus text-questSecondary"></i> 3. Sunnah Rawatib (Qobliyah & Ba'diyah)
+                            </span>
+                            <span class="text-xs font-bold text-slate-500">Target: <strong class="text-questPrimary">21x / Pekan</strong></span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 mb-3">Pelindung shalat wajibmu sekaligus jaminan istana megah di surga.</p>
+                        <div class="flex flex-wrap gap-1 md:gap-1.5 max-h-24 overflow-y-auto p-1 border border-slate-200/50 rounded-xl" id="btn-group-rawatib">
+                            <!-- Populated Dynamically with 0-21 buttons -->
+                        </div>
+                    </div>
+
+                    <!-- 4. Shalat Fardhu Berjamaah -->
+                    <div class="border border-slate-100 bg-slate-50/50 rounded-2xl p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-extrabold text-questPrimary uppercase tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-users text-questSecondary"></i> 4. Berjamaah di Masjid (5 Waktu)
+                            </span>
+                            <span class="text-xs font-bold text-slate-500">Target: <strong class="text-questPrimary">35x / Pekan</strong></span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 mb-3">Pahala dilipatgandakan 27x lipat dan membangun kecerdasan sosial bersama rekan sebaya.</p>
+                        <div class="flex flex-wrap gap-1 md:gap-1.5 max-h-32 overflow-y-auto p-1 border border-slate-200/50 rounded-xl" id="btn-group-jamaah">
+                            <!-- Populated Dynamically with 0-35 buttons -->
+                        </div>
+                    </div>
+
+                    <!-- 5. Puasa Sunnah Kamis -->
+                    <div class="border border-slate-100 bg-slate-50/50 rounded-2xl p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-extrabold text-questPrimary uppercase tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-water text-questSecondary"></i> 5. Puasa Sunnah Kamis
+                            </span>
+                            <span class="text-xs font-bold text-slate-500">Target: <strong class="text-questPrimary">1x / Pekan</strong></span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 mb-3">Detoks racun fisik dan mental, serta meningkatkan daya tahan kontrol emosi.</p>
+                        <div class="flex flex-wrap gap-1.5" id="btn-group-puasa">
+                            <!-- Populated Dynamically with 0-1 buttons -->
+                        </div>
+                    </div>
+
+                    <!-- 6. Shalat Tahajjud -->
+                    <div class="border border-slate-100 bg-slate-50/50 rounded-2xl p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-extrabold text-questPrimary uppercase tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-moon text-questSecondary"></i> 6. Shalat Tahajjud (Malam)
+                            </span>
+                            <span class="text-xs font-bold text-slate-500">Target: <strong class="text-questPrimary">2x / Pekan</strong></span>
+                        </div>
+                        <p class="text-[11px] text-slate-500 mb-3">Akses VIP sepertiga malam terakhir, waktu mustajab bermunajat dan meminta cita-cita luhur.</p>
+                        <div class="flex flex-wrap gap-1.5" id="btn-group-tahajjud">
+                            <!-- Populated Dynamically with 0-2 buttons -->
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- RIGHT COLUMN: UPGRADED RABBANI CONTRACT CARD & CLOUD SYNC (5 COLS) -->
+        <section class="lg:col-span-5 flex flex-col gap-6">
+            
+            <!-- CONTROLS & DATABASE SYNC PANEL -->
+            <div class="bg-white rounded-3xl shadow-xl border border-slate-100 p-6">
+                <h3 class="font-bold text-questPrimary font-game text-base flex items-center gap-2 mb-2">
+                    <i class="fa-solid fa-cloud-arrow-up text-questSecondary"></i> Cloud Simpan & Muat Capaian
+                </h3>
+                <p class="text-xs text-slate-500 mb-4">Simpan datamu agar Ustaz/Ustazah dapat merekap pencapaian ibadahmu secara real-time dari portal pendidik.</p>
+                
+                <div class="flex flex-col gap-2.5">
+                    <button onclick="saveStudentProgress()" class="w-full bg-questPrimary hover:bg-questLight text-white py-3 px-4 rounded-xl font-bold text-sm tracking-wide transition-all flex items-center justify-center gap-2 shadow-md">
+                        <i class="fa-solid fa-floppy-disk"></i> <span>KIRIM CAPAIAN KE DATABASE</span>
+                    </button>
+                    
+                    <div id="sync-status" class="hidden text-xs py-2 px-3 rounded-lg text-center font-semibold">
+                        <!-- Filled on response -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- UPGRADED CUSTOMIZABLE CONTRACT CARD -->
+            <div class="bg-white rounded-3xl shadow-xl border border-slate-100 p-6 flex-grow">
+                <div class="mb-4">
+                    <span class="text-xs font-extrabold text-questSecondary uppercase tracking-widest">PREVIEW KARTU:</span>
+                    <h2 class="text-lg md:text-xl font-bold text-questPrimary font-game mt-1 flex items-center gap-2">
+                        <i class="fa-solid fa-id-card-clip text-questSecondary"></i> Rabbani Contract Card
+                    </h2>
+                    <p class="text-xs text-slate-500">Sesuaikan profil spiritualmu! Kartu ini akan terupdate otomatis dan bisa diprint untuk ditunjukkan ke Ustaz/Ustazah.</p>
+                </div>
+
+                <!-- Custom Card Rendering Area -->
+                <div class="border-2 border-dashed border-questSecondary/40 rounded-2xl p-5 bg-gradient-to-br from-questPrimary via-questDark to-slate-900 text-white relative overflow-hidden shadow-xl" id="contract-card-element">
+                    
+                    <!-- Glow graphics -->
+                    <div class="absolute right-[-30px] bottom-[-30px] opacity-10 text-9xl">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    
+                    <!-- Decorative background ring -->
+                    <div class="absolute -top-12 -left-12 w-32 h-32 bg-questSecondary/10 rounded-full blur-xl"></div>
+
+                    <div class="flex justify-between items-start pb-3 border-b border-white/10 relative z-10">
+                        <div>
+                            <h4 class="font-extrabold text-xs tracking-wider font-game text-questSecondary uppercase">KONTRAK SANG PEJUANG</h4>
+                            <p class="text-[9px] text-teal-200 tracking-widest font-semibold uppercase">SMP IT BINA INSANI KEDIRI</p>
+                        </div>
+                        <span class="bg-questSecondary/20 border border-questSecondary/30 text-questSecondary px-2 py-0.5 rounded text-[9px] font-bold tracking-wider" id="player-badge">PEJUANG</span>
+                    </div>
+
+                    <!-- Card Body -->
+                    <div class="my-4 space-y-4 relative z-10 text-xs">
+                        <div class="flex items-center gap-3">
+                            <!-- Avatar Selector Inside Card -->
+                            <div class="relative group cursor-pointer" onclick="cycleAvatar()">
+                                <div class="w-12 h-12 rounded-full bg-questSecondary/20 border-2 border-questSecondary flex items-center justify-center text-xl text-questSecondary" id="card-avatar-container">
+                                    <i class="fa-solid fa-user-ninja" id="card-avatar"></i>
+                                </div>
+                                <div class="absolute bottom-0 right-0 w-4 h-4 bg-white text-questDark rounded-full flex items-center justify-center text-[8px] border border-questDark shadow font-bold">
+                                    <i class="fa-solid fa-rotate"></i>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <span class="text-[8px] text-teal-200 block uppercase tracking-wider font-medium">NAMA SANG PEJUANG:</span>
+                                <div class="flex flex-wrap items-baseline gap-2">
+                                    <span id="card-player-name" class="font-extrabold text-sm text-white">Guest Warrior</span>
+                                    <span id="card-player-class" class="text-[10px] font-bold text-questSecondary">VII - A</span>
+                                </div>
+                                <span class="text-[9px] text-teal-100 block italic cursor-pointer underline hover:text-white" onclick="changeCustomRole()" id="card-custom-role">Role: Pejuang Subuh (Ganti)</span>
+                            </div>
+                        </div>
+
+                        <!-- Target Recap Section -->
+                        <div>
+                            <span class="text-[8px] text-teal-200 block uppercase tracking-wider font-medium">REKAP CAPAIAN MINGGU INI:</span>
+                            <div class="grid grid-cols-2 gap-x-2 gap-y-1 text-[10px] mt-1.5 text-slate-100">
+                                <div><i class="fa-solid fa-shield text-questSecondary mr-1"></i> Dzikir: <span class="font-bold text-white" id="recap-matsurat">0/7</span></div>
+                                <div><i class="fa-solid fa-sun text-questSecondary mr-1"></i> Dhuha: <span class="font-bold text-white" id="recap-dhuha">0/7</span></div>
+                                <div><i class="fa-solid fa-circle-plus text-questSecondary mr-1"></i> Rawatib: <span class="font-bold text-white" id="recap-rawatib">0/21</span></div>
+                                <div><i class="fa-solid fa-users text-questSecondary mr-1"></i> Jamaah: <span class="font-bold text-white" id="recap-jamaah">0/35</span></div>
+                                <div><i class="fa-solid fa-water text-questSecondary mr-1"></i> Puasa: <span class="font-bold text-white" id="recap-puasa">0/1</span></div>
+                                <div><i class="fa-solid fa-moon text-questSecondary mr-1"></i> Tahajjud: <span class="font-bold text-white" id="recap-tahajjud">0/2</span></div>
+                            </div>
+                        </div>
+
+                        <!-- Editable Personal Commitment -->
+                        <div>
+                            <span class="text-[8px] text-teal-200 block uppercase tracking-wider font-medium flex justify-between items-center">
+                                <span>TEKAD DARI DALAM HATI (KLIK UNTUK EDIT):</span>
+                            </span>
+                            <textarea id="card-commitment-text" oninput="saveLocalCommitment()" class="w-full bg-black/20 border border-white/10 rounded-lg p-2 text-[10px] italic text-teal-100 focus:outline-none focus:border-questSecondary h-14 resize-none leading-relaxed mt-1" placeholder="Tuliskan alasan terdalam kenapa kamu butuh ibadah di sini..."></textarea>
+                        </div>
+
+                        <!-- REALTIME USTADZ FEEDBACK BOX -->
+                        <div id="ustadz-feedback-wrapper" class="hidden border border-yellow-500/40 bg-yellow-500/10 rounded-xl p-3 shadow-inner">
+                            <span class="text-[8px] text-questSecondary font-extrabold tracking-widest uppercase flex items-center gap-1">
+                                <i class="fa-solid fa-comments"></i> CATATAN DARI USTAZ/USTAZAH:
+                            </span>
+                            <p id="ustadz-feedback-text" class="text-[10.5px] font-semibold text-slate-100 italic mt-1 leading-relaxed">
+                                "Selesaikan targetmu pekan ini nak, bapak pantau terus!"
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="flex justify-between items-center pt-3 border-t border-white/10 text-[8px] text-teal-200">
+                        <div>
+                            <span>PEKAN / TANGGAL LOG:</span>
+                            <span class="block text-white font-extrabold" id="card-timestamp">Pekan 1 (Today)</span>
+                        </div>
+                        <div class="text-right">
+                            <span>REKAPITULASI:</span>
+                            <span class="block text-gameGreen font-extrabold uppercase" id="card-status-badge"><i class="fa-solid fa-circle-check"></i> AKTIF</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Snapshot/PDF Guidelines and Instructions -->
+                <div class="mt-4 p-3 bg-teal-50 border border-teal-100 rounded-xl flex items-start gap-2.5">
+                    <i class="fa-solid fa-circle-info text-questPrimary text-sm mt-0.5"></i>
+                    <div class="text-[10px] text-slate-600 leading-relaxed">
+                        <strong>Tips Screenshot Kartu:</strong> Setelah menekan tombol <strong>Kirim Capaian ke Database</strong>, silakan screenshot kartu ini dan kirimkan ke grup halaqah kalian!
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- TEACHER PORTAL DATABASE OVERLAY MODAL -->
+    <div id="teacher-portal-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-5xl h-[85vh] flex flex-col overflow-hidden border border-slate-100 transition-all duration-300 transform scale-95" id="teacher-portal-container">
+            
+            <!-- Modal Header -->
+            <div class="bg-questDark text-white p-6 flex justify-between items-center border-b border-questLight/20">
+                <div class="flex items-center gap-3">
+                    <span class="w-10 h-10 rounded-xl bg-questSecondary flex items-center justify-center text-questDark text-lg font-bold">
+                        <i class="fa-solid fa-database"></i>
+                    </span>
+                    <div>
+                        <h2 class="text-lg font-extrabold font-game">Database &amp; Rekapitulasi Spiritual Siswa</h2>
+                        <p class="text-[10px] text-teal-200 tracking-wider">PORTAL KHUSUS USTAZ &amp; USTAZAH • SMP IT BINA INSANI KEDIRI</p>
+                    </div>
+                </div>
+                <button onclick="closeTeacherPortal()" class="text-white hover:text-questSecondary transition-colors p-1.5 bg-white/5 hover:bg-white/10 rounded-lg">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- PIN Auth Gate Screen -->
+            <div id="teacher-auth-gate" class="flex-grow flex flex-col items-center justify-center p-6 bg-slate-50 text-center">
+                <div class="max-w-md bg-white p-8 rounded-2xl shadow-xl border border-slate-100">
+                    <i class="fa-solid fa-lock text-questSecondary text-5xl mb-4 animate-bounce"></i>
+                    <h3 class="font-bold text-slate-800 text-lg font-game mb-2">Keamanan Database</h3>
+                    <p class="text-xs text-slate-500 mb-6 leading-relaxed">Halaman rekap capaian ini rahasia dan hanya boleh diakses oleh Ustaz/Ustazah pendamping. Silakan masukkan PIN Pendidik Anda.</p>
+                    
+                    <div class="space-y-4">
+                        <input type="password" id="teacher-pin-input" placeholder="Masukkan PIN Ustaz/Ustazah..." class="w-full bg-slate-100 border border-slate-200 rounded-xl p-3 text-center font-bold text-slate-800 tracking-widest focus:outline-none focus:border-questPrimary">
+                        <button onclick="authenticateTeacher()" class="w-full bg-questPrimary hover:bg-questDark text-white font-bold py-3 px-4 rounded-xl text-sm transition-all shadow">
+                            Buka Kunci Database
+                        </button>
+                        <p id="auth-error-msg" class="text-xs text-gameRed font-bold hidden">PIN yang Anda masukkan salah!</p>
+                        <span class="text-[10px] text-slate-400 block mt-2">PIN Standar Default: <strong>PAI2026</strong></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Authenticated Dashboard UI -->
+            <div id="teacher-dashboard-view" class="flex-grow flex flex-col overflow-hidden hidden">
+                
+                <!-- Filter Bar -->
+                <div class="bg-slate-50 p-4 border-b border-slate-200 flex flex-col md:flex-row gap-4 justify-between items-center">
+                    <div class="relative w-full md:w-80">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                        <input type="text" id="teacher-search-input" oninput="renderTeacherTable()" placeholder="Cari nama atau kelas..." class="w-full pl-10 pr-4 py-2 bg-white border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-questPrimary">
+                    </div>
+                    
+                    <div class="flex items-center gap-3 w-full md:w-auto">
+                        <button onclick="exportTableToCSV()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all shadow-sm">
+                            <i class="fa-solid fa-file-excel"></i> <span>Export Rekap (CSV)</span>
+                        </button>
+                        <button onclick="loadDatabaseFromCloud()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-3.5 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all">
+                            <i class="fa-solid fa-sync"></i> <span>Refresh Real-time</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Table View -->
+                <div class="flex-grow overflow-auto p-6">
+                    <div class="border border-slate-200/80 rounded-2xl overflow-hidden shadow-sm">
+                        <table class="w-full text-left border-collapse bg-white">
+                            <thead>
+                                <tr class="bg-questPrimary text-white text-xs uppercase tracking-wider font-semibold">
+                                    <th class="p-4">Identitas Siswa</th>
+                                    <th class="p-4 text-center">Baterai Jiwa</th>
+                                    <th class="p-4 text-center">Spiritual Recap (Counts)</th>
+                                    <th class="p-4">Tekad / Komitmen</th>
+                                    <th class="p-4 text-center">Aksi &amp; Feedback</th>
+                                </tr>
+                            </thead>
+                            <tbody id="student-records-tbody" class="divide-y divide-slate-100 text-xs">
+                                <!-- Populated Dynamically via Cloud Snapshots -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="no-records-msg" class="text-center py-12 text-slate-400 hidden">
+                        <i class="fa-solid fa-folder-open text-4xl mb-2"></i>
+                        <p class="text-xs">Tidak ada data siswa ditemukan.</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- TEACHER FEEDBACK EXPANSION MODAL -->
+    <div id="teacher-feedback-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 border border-slate-100 animate-scaleUp">
+            <h3 class="font-bold text-questPrimary font-game text-base flex items-center gap-2 mb-2">
+                <i class="fa-solid fa-comment-medical text-questSecondary"></i> Tulis Umpan Balik Ustaz/Ustazah
+            </h3>
+            <p class="text-xs text-slate-500 mb-4">Feedback ini akan tampil secara instan di layar HP/komputer siswa saat mereka membuka "Rabbani Spirit Quest" mereka!</p>
+            
+            <input type="hidden" id="feedback-student-id">
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Nama Siswa:</label>
+                    <input type="text" id="feedback-student-name" class="w-full bg-slate-100 rounded-xl p-2.5 text-xs text-slate-700 font-bold focus:outline-none" readonly>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Pesan Feedback &amp; Doa Ustaz/Ustazah:</label>
+                    <textarea id="feedback-text-area" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs text-slate-800 h-28 focus:outline-none focus:border-questPrimary" placeholder="Tulis catatan, evaluasi, atau semangati siswamu..."></textarea>
+                </div>
+                <div class="flex gap-2 justify-end">
+                    <button onclick="closeFeedbackModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-bold transition-all">Batal</button>
+                    <button onclick="submitTeacherFeedback()" class="px-4 py-2 bg-questPrimary hover:bg-questLight text-white rounded-xl text-xs font-bold transition-all">Kirim Feedback</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="max-w-6xl mx-auto mt-12 px-4 text-center">
+        <p class="text-xs text-slate-400">© 2026 SMP IT Bina Insani Kediri. Hak Cipta Dilindungi.</p>
+        <p class="text-[10px] text-slate-400/80 mt-1">Dibuat khusus untuk membakar semangat spiritual mandiri di hati generasi muda kita.</p>
+    </footer>
+
+    <!-- FIREBASE MODULES -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Firebase Configuration Fallback Block
+        let app, db, auth;
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'rabbani-spirit-quest-default';
+        const rawConfig = typeof __firebase_config !== 'undefined' ? __firebase_config : null;
+        
+        let firebaseConfig = {};
+        if (rawConfig) {
+            try {
+                firebaseConfig = JSON.parse(rawConfig);
+            } catch (e) {
+                console.warn("Could not parse provided firebase configuration. Mock state active.");
+            }
+        }
+
+        // Initialize Firebase if config is valid
+        if (firebaseConfig.apiKey) {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+            
+            // Auto authenticate immediately on start
+            authenticateUser();
+        } else {
+            console.warn("No valid Firebase credentials. Using offline demo database.");
+        }
+
+        // Authenticate student anonymously
+        async function authenticateUser() {
+            if (!auth) return;
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+                console.log("Firebase authenticated successfully as:", auth.currentUser.uid);
+                
+                // Set up real-time listener for current student to pull ustadz feedback instantly
+                listenToCurrentStudentRecord();
+            } catch (error) {
+                console.error("Firebase auth error:", error);
+            }
+        }
+
+        // Save current progress to Firestore Database
+        window.saveStudentProgress = async function() {
+            // Prepare record data
+            const record = {
+                uid: auth ? auth.currentUser.uid : 'offline-demo-id',
+                name: document.getElementById('player-name-input').value.trim() || 'Guest Warrior',
+                class: document.getElementById('player-class-select').value || '-',
+                week: document.getElementById('recap-week-select').value || 'Pekan 1',
+                date: document.getElementById('recap-date-input').value || new Date().toISOString().split('T')[0],
+                matsurat: currentValues.matsurat,
+                dhuha: currentValues.dhuha,
+                rawatib: currentValues.rawatib,
+                jamaah: currentValues.jamaah,
+                puasa: currentValues.puasa,
+                tahajjud: currentValues.tahajjud,
+                battery: currentBatteryPercentage,
+                role: playerCustomRole,
+                avatarIndex: currentAvatarIndex,
+                commitment: document.getElementById('card-commitment-text').value,
+                timestamp: document.getElementById('card-timestamp').innerText,
+                updatedAt: new Date().toISOString()
+            };
+
+            const statusBox = document.getElementById('sync-status');
+            statusBox.className = "text-xs py-2 px-3 rounded-lg text-center font-semibold bg-blue-50 text-blue-700 block";
+            statusBox.innerHTML = "<i class='fa-solid fa-spinner animate-spin'></i> Menyimpan ke cloud...";
+
+            if (!db || !auth) {
+                // Offline fallback
+                localStorage.setItem('offline_progress', JSON.stringify(record));
+                setTimeout(() => {
+                    statusBox.className = "text-xs py-2 px-3 rounded-lg text-center font-semibold bg-amber-50 text-amber-700 block";
+                    statusBox.innerHTML = "<i class='fa-solid fa-triangle-exclamation'></i> Tersimpan Lokal (Offline Mode)";
+                }, 800);
+                return;
+            }
+
+            try {
+                // RULE 1: STRICT PATH
+                const recordRef = doc(db, 'artifacts', appId, 'public', 'data', 'student_recap', auth.currentUser.uid);
+                
+                // Merge with any existing fields (such as previous feedback sent by teacher)
+                const existingSnap = await getDoc(recordRef);
+                if (existingSnap.exists()) {
+                    const existingData = existingSnap.data();
+                    record.feedback = existingData.feedback || "";
+                } else {
+                    record.feedback = "";
+                }
+
+                await setDoc(recordRef, record);
+                
+                statusBox.className = "text-xs py-2 px-3 rounded-lg text-center font-semibold bg-emerald-50 text-emerald-700 block";
+                statusBox.innerHTML = "<i class='fa-solid fa-cloud-arrow-up'></i> Capaian Berhasil Dikirim ke Cloud!";
+                setTimeout(() => statusBox.classList.add('hidden'), 5000);
+            } catch (error) {
+                console.error("Error saving to Firestore:", error);
+                statusBox.className = "text-xs py-2 px-3 rounded-lg text-center font-semibold bg-red-50 text-red-700 block";
+                statusBox.innerHTML = "<i class='fa-solid fa-circle-exclamation'></i> Gagal menyimpan: " + error.message;
+            }
+        };
+
+        // Real-time listener for current student record (to pull feedback on the fly)
+        function listenToCurrentStudentRecord() {
+            if (!db || !auth) return;
+            
+            // RULE 1: STRICT PATH
+            const recordRef = doc(db, 'artifacts', appId, 'public', 'data', 'student_recap', auth.currentUser.uid);
+            
+            onSnapshot(recordRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    if (data.feedback && data.feedback.trim() !== "") {
+                        document.getElementById('ustadz-feedback-wrapper').classList.remove('hidden');
+                        document.getElementById('ustadz-feedback-text').innerText = `"${data.feedback}"`;
+                    } else {
+                        document.getElementById('ustadz-feedback-wrapper').classList.add('hidden');
+                    }
+                    
+                    // Auto-restore offline name/role if it was not edited during this session
+                    if (document.getElementById('player-name-input').value.trim() === "" || document.getElementById('player-name-input').value === "Guest Warrior") {
+                        if (data.name) {
+                            document.getElementById('player-name-input').value = data.name;
+                            updatePlayerName();
+                        }
+                    }
+                    if (data.class) {
+                        document.getElementById('player-class-select').value = data.class;
+                        updatePlayerClass();
+                    }
+                    if (data.week) {
+                        document.getElementById('recap-week-select').value = data.week;
+                        updateRecapWeek();
+                    }
+                    if (data.date) {
+                        document.getElementById('recap-date-input').value = data.date;
+                        updateRecapDate();
+                    }
+                    if (data.commitment) {
+                        document.getElementById('card-commitment-text').value = data.commitment;
+                    }
+                    if (data.avatarIndex !== undefined) {
+                        currentAvatarIndex = data.avatarIndex;
+                        updateAvatarVisual();
+                    }
+                    if (data.role) {
+                        playerCustomRole = data.role;
+                        document.getElementById('card-custom-role').innerText = `Role: ${playerCustomRole} (Ganti)`;
+                    }
+                }
+            }, (error) => {
+                console.warn("Realtime listener failed:", error);
+            });
+        }
+
+        // Teacher Dashboard: Load all student records
+        let allStudentRecords = [];
+        window.loadDatabaseFromCloud = async function() {
+            if (!db) {
+                // Load dummy records for offline demonstration
+                allStudentRecords = [
+                    { id: '1', name: 'Zaid Al-Anshari', class: 'VII - A', week: 'Pekan 1', date: '2026-07-19', matsurat: 6, dhuha: 5, rawatib: 15, jamaah: 28, puasa: 1, tahajjud: 1, battery: 78, role: 'Pejuang Subuh', commitment: 'Ingin istiqamah demi berbakti pada ayah ibu', timestamp: 'Pekan 1 (19 Juli 2026)', feedback: 'Bagus nak, tingkatkan lagi rawatibnya!' },
+                    { id: '2', name: 'Aisyah Humaira', class: 'VIII - B', week: 'Pekan 1', date: '2026-07-19', matsurat: 7, dhuha: 7, rawatib: 21, jamaah: 35, puasa: 1, tahajjud: 2, battery: 100, role: 'Penghafal Al-Qur\'an', commitment: 'Ibadah dhuha penyejuk jiwa pembuka hafalan.', timestamp: 'Pekan 1 (19 Juli 2026)', feedback: '' }
+                ];
+                renderTeacherTable();
+                return;
+            }
+
+            try {
+                // RULE 1 & 2: Get all records with a simple collection call
+                const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'student_recap');
+                const querySnap = await getDocs(colRef);
+                
+                allStudentRecords = [];
+                querySnap.forEach((doc) => {
+                    allStudentRecords.push({ id: doc.id, ...doc.data() });
+                });
+
+                renderTeacherTable();
+            } catch (error) {
+                console.error("Error reading student records:", error);
+            }
+        };
+
+        // Render Student records in Teacher Dashboard Table
+        window.renderTeacherTable = function() {
+            const tbody = document.getElementById('student-records-tbody');
+            tbody.innerHTML = "";
+            const searchVal = document.getElementById('teacher-search-input').value.toLowerCase().trim();
+
+            const filtered = allStudentRecords.filter(r => 
+                r.name.toLowerCase().includes(searchVal) || 
+                (r.class && r.class.toLowerCase().includes(searchVal))
+            );
+
+            if (filtered.length === 0) {
+                document.getElementById('no-records-msg').classList.remove('hidden');
+                return;
+            } else {
+                document.getElementById('no-records-msg').classList.add('hidden');
+            }
+
+            filtered.forEach(record => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition-colors";
+                
+                // Color badges for battery statuses
+                let batteryBadge = "";
+                if (record.battery <= 30) {
+                    batteryBadge = `<span class="bg-red-100 text-gameRed px-2.5 py-1 rounded-full font-extrabold">${record.battery}%</span>`;
+                } else if (record.battery < 80) {
+                    batteryBadge = `<span class="bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full font-extrabold">${record.battery}%</span>`;
+                } else {
+                    batteryBadge = `<span class="bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full font-extrabold">${record.battery}%</span>`;
+                }
+
+                tr.innerHTML = `
+                    <td class="p-4">
+                        <div class="font-extrabold text-slate-800 text-xs md:text-sm">${record.name}</div>
+                        <div class="text-[10px] text-slate-400 font-semibold uppercase">Kelas: ${record.class || '-'} • ${record.week || 'Pekan -'} • Log: ${record.timestamp || 'Today'}</div>
+                        <div class="text-[10px] text-teal-600 font-semibold uppercase">Role: ${record.role || 'Pejuang'}</div>
+                    </td>
+                    <td class="p-4 text-center font-bold">
+                        ${batteryBadge}
+                    </td>
+                    <td class="p-4">
+                        <div class="grid grid-cols-2 gap-x-3 gap-y-0.5 text-[10px] text-slate-600 bg-slate-50 p-2 rounded-xl">
+                            <div>Dzikir: <strong class="text-slate-800">${record.matsurat}/7</strong></div>
+                            <div>Dhuha: <strong class="text-slate-800">${record.dhuha}/7</strong></div>
+                            <div>Rawatib: <strong class="text-slate-800">${record.rawatib}/21</strong></div>
+                            <div>Jamaah: <strong class="text-slate-800">${record.jamaah}/35</strong></div>
+                            <div>Puasa: <strong class="text-slate-800">${record.puasa}/1</strong></div>
+                            <div>Tahajjud: <strong class="text-slate-800">${record.tahajjud}/2</strong></div>
+                        </div>
+                    </td>
+                    <td class="p-4 max-w-xs truncate text-[11px] italic text-slate-500" title="${record.commitment || ''}">
+                        "${record.commitment || '-'}"
+                    </td>
+                    <td class="p-4">
+                        <div class="flex items-center justify-center gap-2">
+                            <button onclick="openFeedbackModal('${record.id}', '${record.name}', '${record.feedback || ''}')" class="bg-questSecondary hover:bg-yellow-500 text-questDark px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1 shadow-sm">
+                                <i class="fa-solid fa-comment-dots"></i> Feedback
+                            </button>
+                            <button onclick="deleteStudentRecord('${record.id}')" class="bg-red-50 hover:bg-red-100 text-gameRed p-1.5 rounded-lg text-xs font-bold transition-all" title="Hapus Data">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                        ${record.feedback ? `<div class="text-[9px] text-emerald-700 italic mt-1 font-semibold truncate max-w-[150px]">Komentar: "${record.feedback}"</div>` : ''}
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        };
+
+        // Submit Teacher Feedback directly to specific Student record
+        window.submitTeacherFeedback = async function() {
+            const studentId = document.getElementById('feedback-student-id').value;
+            const text = document.getElementById('feedback-text-area').value.trim();
+
+            if (!db) {
+                // Offline fallback logic
+                const idx = allStudentRecords.findIndex(r => r.id === studentId);
+                if (idx !== -1) {
+                    allStudentRecords[idx].feedback = text;
+                    renderTeacherTable();
+                }
+                closeFeedbackModal();
+                return;
+            }
+
+            try {
+                // RULE 1: STRICT PATH
+                const recordRef = doc(db, 'artifacts', appId, 'public', 'data', 'student_recap', studentId);
+                await setDoc(recordRef, { feedback: text }, { merge: true });
+                
+                // Reload dashboard state
+                await loadDatabaseFromCloud();
+                closeFeedbackModal();
+            } catch (error) {
+                console.error("Error submitting feedback:", error);
+            }
+        };
+
+        // Delete specific student record
+        window.deleteStudentRecord = async function(studentId) {
+            if (!confirm("Apakah Ustaz/Ustazah yakin ingin menghapus rekap data siswa ini dari database?")) return;
+
+            if (!db) {
+                allStudentRecords = allStudentRecords.filter(r => r.id !== studentId);
+                renderTeacherTable();
+                return;
+            }
+
+            try {
+                // RULE 1: STRICT PATH
+                const recordRef = doc(db, 'artifacts', appId, 'public', 'data', 'student_recap', studentId);
+                await deleteDoc(recordRef);
+                await loadDatabaseFromCloud();
+            } catch (error) {
+                console.error("Error deleting record:", error);
+            }
+        };
+
+        // Export active table dataset to standard Excel-readable CSV format
+        window.exportTableToCSV = function() {
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "Nama Siswa,Kelas,Pekan,Tanggal Log,Baterai Jiwa,Dzikir Matsurat,Shalat Dhuha,Rawatib,Jamaah Masjid,Puasa Kamis,Tahajjud,Komitmen Pribadi,Feedback Ustaz/Ustazah\n";
+
+            allStudentRecords.forEach(r => {
+                const row = [
+                    `"${r.name}"`,
+                    `"${r.class || '-'}"`,
+                    `"${r.week || '-'}"`,
+                    `"${r.timestamp || 'Today'}"`,
+                    `"${r.battery}%"`,
+                    `"${r.matsurat}/7"`,
+                    `"${r.dhuha}/7"`,
+                    `"${r.rawatib}/21"`,
+                    `"${r.jamaah}/35"`,
+                    `"${r.puasa}/1"`,
+                    `"${r.tahajjud}/2"`,
+                    `"${(r.commitment || '').replace(/"/g, '""')}"`,
+                    `"${(r.feedback || '').replace(/"/g, '""')}"`
+                ].join(",");
+                csvContent += row + "\n";
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `Rekap_Rabbani_Spirit_Quest_${new Date().toLocaleDateString('id-ID').replace(/\//g, '-')}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+    </script>
+
+    <!-- INTERACTIVE PAGE RENDERING & DOM LOGIC -->
+    <script>
+        // Application Target Configurations
+        const maxTargets = {
+            matsurat: 7,
+            dhuha: 7,
+            rawatib: 21,
+            jamaah: 35,
+            puasa: 1,
+            tahajjud: 2
+        };
+
+        // Active State of Student Recap Data
+        let currentValues = {
+            matsurat: 0,
+            dhuha: 0,
+            rawatib: 0,
+            jamaah: 0,
+            puasa: 0,
+            tahajjud: 0
+        };
+
+        const batteryStates = {
+            low: {
+                title: "Jiwa Remaja Low-Bat (Kritis!)",
+                desc: "Sering malas gerak, overthinking, hampa, tidak tenang, gampang terbawa emosi negatif. Yuk terus colok charger rohanimu!",
+                buff: "<i class='fa-solid fa-bolt-lightning animate-pulse'></i> Butuh Charger: Tingkatkan dhuha, rawatib & dzikir sekarang!",
+                class: "from-gameRed to-orange-500",
+                textClass: "text-gameRed"
+            },
+            medium: {
+                title: "Energi Seimbang (Stabil)",
+                desc: "Fokus belajar stabil, hati relatif tenang, ibadah harian mulai terbentuk secara berkala. Masih perlu dorongan agar mencapai daya penuh!",
+                buff: "<i class='fa-solid fa-battery-half'></i> Spiritual Buff: Tingkatkan shalat berjamaah & tahajjud pembuka pintu langit!",
+                class: "from-amber-500 to-yellow-400",
+                textClass: "text-amber-500"
+            },
+            high: {
+                title: "Rabbani Master (Full Charged!)",
+                desc: "Jiwa sangat lapang, fokus belajar tajam, hati diliputi optimisme & kedamaian, akhlak tangguh membentengi dari pengaruh buruk.",
+                buff: "<i class='fa-solid fa-circle-check animate-bounce'></i> VIP Buff: Dijamin ketenangan lahir batin & pertolongan Allah dari segala arah!",
+                class: "from-emerald-500 to-gameGreen",
+                textClass: "text-gameGreen"
+            }
+        };
+
+        const avatars = [
+            "fa-user-ninja",
+            "fa-user-shield",
+            "fa-user-astronaut",
+            "fa-user-tie",
+            "fa-user-graduate",
+            "fa-crown"
+        ];
+        let currentAvatarIndex = 0;
+        let playerCustomRole = "Pejuang Subuh";
+        let currentBatteryPercentage = 10;
+
+        window.addEventListener('load', function() {
+            // Restore any locally cached commitment
+            const savedCommitment = localStorage.getItem('spirit_card_commitment');
+            if (savedCommitment) {
+                document.getElementById('card-commitment-text').value = savedCommitment;
+            } else {
+                document.getElementById('card-commitment-text').value = "Saya meluangkan waktu beribadah bukan karena disuruh orang tua atau guru, melainkan karena jiwa saya butuh perlindungan dan tuntunan Allah setiap waktu.";
+            }
+
+            // Set default date input value to today
+            const todayInput = new Date().toISOString().split('T')[0];
+            document.getElementById('recap-date-input').value = todayInput;
+
+            // Populate all number groups dynamically
+            generateSelectionButtons();
+            
+            // Set up initial state of card and battery status
+            updateTimestamp();
+            calculateBattery();
+        });
+
+        // Dynamic generation of selection buttons for precise choice values
+        function generateSelectionButtons() {
+            Object.keys(maxTargets).forEach(key => {
+                const container = document.getElementById(`btn-group-${key}`);
+                const max = maxTargets[key];
+                container.innerHTML = "";
+
+                for(let i = 0; i <= max; i++) {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.innerText = `${i}x`;
+                    btn.id = `btn-${key}-${i}`;
+                    
+                    // Style base button classes
+                    btn.className = "px-3 py-1.5 rounded-lg font-extrabold text-[11px] md:text-xs transition-all border border-slate-200/80 bg-white text-slate-700 hover:border-questPrimary hover:bg-slate-50";
+                    btn.setAttribute('onclick', `selectCountValue('${key}', ${i})`);
+                    
+                    container.appendChild(btn);
+                }
+                
+                // Select 0 value initially
+                selectCountValue(key, 0);
+            });
+        }
+
+        // Action when a student clicks on an exact count value button
+        window.selectCountValue = function(key, val) {
+            currentValues[key] = val;
+            
+            // Reset background styles of all sibling buttons in this group
+            const max = maxTargets[key];
+            for (let i = 0; i <= max; i++) {
+                const btn = document.getElementById(`btn-${key}-${i}`);
+                if (btn) {
+                    btn.className = "px-3 py-1.5 rounded-lg font-extrabold text-[11px] md:text-xs transition-all border border-slate-200/80 bg-white text-slate-700 hover:border-questPrimary hover:bg-slate-50";
+                }
+            }
+
+            // High-contrast highlighted style for active button
+            const activeBtn = document.getElementById(`btn-${key}-${val}`);
+            if (activeBtn) {
+                activeBtn.className = "px-3 py-1.5 rounded-lg font-extrabold text-[11px] md:text-xs transition-all border border-questPrimary bg-questPrimary text-white shadow-sm scale-105";
+            }
+
+            // Update individual count labels inside the recap block on the card
+            document.getElementById(`recap-${key}`).innerText = `${val}/${max}`;
+
+            // Recalculate battery & progress
+            calculateBattery();
+        };
+
+        // Reset all tactile count values back to 0
+        window.resetCounters = function() {
+            Object.keys(maxTargets).forEach(key => {
+                selectCountValue(key, 0);
+            });
+        };
+
+        // Calculate interactive battery metrics based on actual progress ratios
+        function calculateBattery() {
+            let totalMaxWeight = 0;
+            let currentAccumulated = 0;
+
+            const weights = {
+                matsurat: 15,
+                dhuha: 15,
+                rawatib: 15,
+                jamaah: 20,
+                puasa: 15,
+                tahajjud: 20
+            };
+
+            Object.keys(maxTargets).forEach(key => {
+                const weight = weights[key];
+                const ratio = currentValues[key] / maxTargets[key];
+                currentAccumulated += ratio * weight;
+                totalMaxWeight += weight;
+            });
+
+            // Base charge is 10%, scaled remaining 90% is based on spiritual activities completed
+            let pct = Math.round(10 + (currentAccumulated / totalMaxWeight) * 90);
+            if (pct > 100) pct = 100;
+            currentBatteryPercentage = pct;
+
+            // Render visual changes
+            const bar = document.getElementById('sim-battery-bar');
+            const pctText = document.getElementById('sim-pct');
+            const spiritLevelText = document.getElementById('spirit-level-text');
+            const spiritProgressBar = document.getElementById('spirit-progress-bar');
+
+            bar.style.width = pct + '%';
+            pctText.innerText = pct + '%';
+            spiritProgressBar.style.width = pct + '%';
+
+            // Determine current status criteria mapping
+            let currentStatus = batteryStates.low;
+            if (pct <= 30) {
+                spiritLevelText.innerText = "NOVICE WARRIOR (" + pct + "%)";
+            } else if (pct < 80) {
+                spiritLevelText.innerText = "SOUL GUARDIAN (" + pct + "%)";
+                currentStatus = batteryStates.medium;
+            } else {
+                spiritLevelText.innerText = "RABBANI MASTER (" + pct + "%)";
+                currentStatus = batteryStates.high;
+            }
+
+            // Sync visual battery status card
+            bar.className = "h-full bg-gradient-to-r rounded-xl transition-all duration-500 flex items-center justify-center font-bold text-white text-xs md:text-sm drop-shadow " + currentStatus.class;
+            
+            const statusTitle = document.getElementById('sim-status-title');
+            statusTitle.innerText = currentStatus.title;
+            statusTitle.className = "font-bold text-sm md:text-base font-game " + currentStatus.textClass;
+            
+            document.getElementById('sim-status-desc').innerText = currentStatus.desc;
+            
+            const statusBuff = document.getElementById('sim-status-buff');
+            statusBuff.innerHTML = currentStatus.buff;
+
+            // Apply relative helper visual stylings based on battery category
+            if (pct <= 30) {
+                statusBuff.className = "mt-3 p-2 rounded-lg bg-red-50 border border-red-100/50 text-[11px] text-gameRed font-semibold flex items-center gap-1.5";
+            } else if (pct < 80) {
+                statusBuff.className = "mt-3 p-2 rounded-lg bg-amber-50 border border-amber-100/50 text-[11px] text-amber-800 font-semibold flex items-center gap-1.5";
+            } else {
+                statusBuff.className = "mt-3 p-2 rounded-lg bg-emerald-50 border border-emerald-100/50 text-[11px] text-emerald-800 font-semibold flex items-center gap-1.5";
+            }
+        }
+
+        // Cycle profile avatars inside card
+        window.cycleAvatar = function() {
+            currentAvatarIndex = (currentAvatarIndex + 1) % avatars.length;
+            updateAvatarVisual();
+        };
+
+        function updateAvatarVisual() {
+            const avatarEl = document.getElementById('card-avatar');
+            avatarEl.className = `fa-solid ${avatars[currentAvatarIndex]}`;
+        }
+
+        // Change Custom spiritual character classes
+        window.changeCustomRole = function() {
+            const list = ["Pejuang Subuh", "Penghafal Al-Qur'an", "Duta Kebaikan", "Mujahid Halaqah", "Ksatria Masjid"];
+            const currentIdx = list.indexOf(playerCustomRole);
+            const nextIdx = (currentIdx + 1) % list.length;
+            playerCustomRole = list[nextIdx];
+            document.getElementById('card-custom-role').innerText = `Role: ${playerCustomRole} (Ganti)`;
+        };
+
+        // Cache text area text locally inside client-browser to survive session refreshes
+        window.saveLocalCommitment = function() {
+            const val = document.getElementById('card-commitment-text').value;
+            localStorage.setItem('spirit_card_commitment', val);
+        };
+
+        // Synchronize and render active player name
+        window.updatePlayerName = function() {
+            const inputVal = document.getElementById('player-name-input').value;
+            const name = inputVal.trim() !== "" ? inputVal : "Guest Warrior";
+            document.getElementById('card-player-name').innerText = name;
+        };
+
+        // Synchronize Class on preview card
+        window.updatePlayerClass = function() {
+            const selectVal = document.getElementById('player-class-select').value;
+            const displayVal = selectVal ? `Class: ${selectVal}` : 'Class: -';
+            document.getElementById('card-player-class').innerText = displayVal;
+        };
+
+        // Trigger timestamp recalculations
+        window.updateRecapWeek = function() {
+            updateTimestamp();
+        };
+
+        window.updateRecapDate = function() {
+            updateTimestamp();
+        };
+
+        function updateTimestamp() {
+            const weekVal = document.getElementById('recap-week-select').value;
+            const dateVal = document.getElementById('recap-date-input').value;
+            
+            let dateFormatted = "Today";
+            if (dateVal) {
+                const d = new Date(dateVal);
+                if (!isNaN(d.getTime())) {
+                    dateFormatted = d.toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
+                }
+            }
+            
+            document.getElementById('card-timestamp').innerText = `${weekVal} (${dateFormatted})`;
+        }
+
+        // Modal & Overlay Dialog View Switch controllers
+        window.toggleTeacherPortal = function() {
+            document.getElementById('teacher-portal-modal').classList.remove('hidden');
+            document.getElementById('teacher-portal-container').classList.add('scale-100');
+            document.getElementById('teacher-portal-container').classList.remove('scale-95');
+        };
+
+        window.closeTeacherPortal = function() {
+            document.getElementById('teacher-portal-modal').classList.add('hidden');
+            document.getElementById('teacher-portal-container').classList.add('scale-95');
+            document.getElementById('teacher-portal-container').classList.remove('scale-100');
+        };
+
+        window.authenticateTeacher = function() {
+            const pin = document.getElementById('teacher-pin-input').value;
+            if (pin === "PAI2026" || pin === "GURUBI2026" || pin === "BINAINSANI" || pin === "USTAZ2026") {
+                document.getElementById('teacher-auth-gate').classList.add('hidden');
+                document.getElementById('teacher-dashboard-view').classList.remove('hidden');
+                document.getElementById('auth-error-msg').classList.add('hidden');
+                
+                // Fetch student records from DB
+                loadDatabaseFromCloud();
+            } else {
+                document.getElementById('auth-error-msg').classList.remove('hidden');
+            }
+        };
+
+        window.openFeedbackModal = function(id, name, existingFeedback) {
+            document.getElementById('feedback-student-id').value = id;
+            document.getElementById('feedback-student-name').value = name;
+            document.getElementById('feedback-text-area').value = existingFeedback || "";
+            document.getElementById('teacher-feedback-modal').classList.remove('hidden');
+        };
+
+        window.closeFeedbackModal = function() {
+            document.getElementById('teacher-feedback-modal').classList.add('hidden');
+        };
+    </script>
+</body>
+</html>
