@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rabbani Spirit Quest - SMP IT Bina Insani Kediri</title>
+    <!-- Tailwind CSS for modern responsive styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans for UI, Poppins for Game Feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        questPrimary: '#0F4C5C',
+                        questSecondary: '#E3A857',
+                        questDark: '#0B3945',
+                        questLight: '#1B6B7F',
+                        questBg: '#F4F7F6',
+                        gameGreen: '#10B981',
+                        gameRed: '#EF4444'
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        game: ['"Poppins"', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .quest-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .quest-card:hover {
+            transform: translateY(-5px);
+        }
+        /* Custom glowing shadow for gamified look */
+        .glowing-btn {
+            box-shadow: 0 0 15px rgba(227, 168, 87, 0.4);
+        }
+        .glowing-btn:hover {
+            box-shadow: 0 0 25px rgba(227, 168, 87, 0.7);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #e2e8f0;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #1B6B7F;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-questBg font-sans text-slate-800 min-h-screen pb-12 selection:bg-questSecondary selection:text-questDark">
+
+    <!-- HEADER & HERO SECTION -->
+    <header class="bg-gradient-to-r from-questPrimary to-questLight text-white relative overflow-hidden py-10 px-4 md:px-8 border-b-4 border-questSecondary rounded-b-[2rem] shadow-xl">
+        <!-- Grid overlay pattern for digital look -->
+        <div class="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+        
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6 relative z-10">
+            <div class="text-center md:text-left">
+                <div class="inline-flex items-center gap-2 bg-questSecondary/20 border border-questSecondary/40 text-questSecondary px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-3">
+                    <i class="fa-solid fa-gamepad animate-pulse"></i> Rabbani Spirit Quest v1.0
+                </div>
+                <h1 class="text-3xl md:text-5xl font-extrabold font-game tracking-tight text-white">
+                    Charge Your <span class="text-questSecondary">Soul</span>,<br class="hidden md:inline"> Level Up Your Life!
+                </h1>
+                <p class="text-teal-100 text-xs md:text-sm mt-3 max-w-xl">
+                    Hai Sobat Rabbani SMP IT Bina Insani Kediri! Ibadah harian itu bukan beban, melainkan *charger* utama biar kamu gak *low-bat* menghadapi masa depan. Yuk cek status rohanimu di sini!
+                </p>
+            </div>
+            
+            <!-- Overall Profile Status Widget -->
+            <div class="bg-questDark/70 backdrop-blur-md border border-white/10 rounded-2xl p-6 w-full md:w-80 shadow-2xl">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-12 h-12 rounded-full bg-questSecondary flex items-center justify-center text-questDark text-2xl font-bold font-game">
+                        <i class="fa-solid fa-user-ninja"></i>
+                    </div>
+                    <div>
+                        <input type="text" id="player-name-input" oninput="updatePlayerName()" placeholder="Tulis Namamu..." class="bg-white/10 border border-white/20 text-white font-bold rounded-lg px-2 py-1 text-sm focus:outline-none focus:border-questSecondary w-full placeholder-teal-200/50">
+                        <span class="text-[10px] text-teal-200 block mt-1 tracking-wider uppercase">ROLE: PEJUANG RABBANI</span>
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <div class="flex justify-between text-xs font-semibold text-teal-100">
+                        <span>SPIRIT LEVEL</span>
+                        <span id="spirit-level-text">WARRIOR (0%)</span>
+                    </div>
+                    <div class="h-3 bg-white/10 rounded-full overflow-hidden p-0.5 border border-white/5">
+                        <div id="spirit-progress-bar" class="h-full bg-gradient-to-r from-red-500 via-yellow-400 to-gameGreen rounded-full transition-all duration-500" style="width: 15%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN INTERACTIVE HUB -->
+    <main class="max-w-6xl mx-auto px-4 mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- LEFT COLUMN: BATTERY SIMULATOR & WEAPONS (7 COLS) -->
+        <section class="lg:col-span-7 flex flex-col gap-8">
+            
+            <!-- THE BATTERY INTERACTIVE BOX -->
+            <div class="bg-white rounded-3xl shadow-xl border border-slate-100 p-6 md:p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h2 class="text-xl md:text-2xl font-bold text-questPrimary font-game flex items-center gap-2">
+                            <i class="fa-solid fa-battery-three-quarters text-questSecondary"></i> Simulator Baterai Jiwa
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-1">Coba centang ibadah harianmu di bawah dan lihat perubahan energi jiwamu!</p>
+                    </div>
+                    <button onclick="resetSimulator()" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold px-3 py-1.5 rounded-lg transition-colors">
+                        <i class="fa-solid fa-rotate-left"></i> Reset
+                    </button>
+                </div>
+                
+                <!-- Large Interactive Battery -->
+                <div class="bg-gradient-to-b from-slate-50 to-slate-100/50 border border-slate-200/60 rounded-2xl p-6 flex flex-col md:flex-row items-center gap-6 justify-between relative overflow-hidden">
+                    
+                    <!-- Battery Shape -->
+                    <div class="flex items-center relative w-full max-w-[240px] md:w-48 h-28 bg-slate-200 rounded-2xl p-2 border-2 border-slate-300">
+                        <div id="sim-battery-bar" class="h-full bg-gradient-to-r from-red-500 to-orange-500 rounded-xl transition-all duration-500 flex items-center justify-center font-bold text-white text-lg drop-shadow-md" style="width: 15%;">
+                            <span id="sim-pct">15%</span>
+                        </div>
+                        <!-- Battery Tip -->
+                        <div class="absolute right-[-10px] top-1/2 -translate-y-1/2 w-2.5 h-10 bg-slate-300 rounded-r-lg"></div>
+                    </div>
+
+                    <!-- Dynamic Soul Status Report -->
+                    <div class="flex-grow bg-white border border-slate-100 p-4 rounded-xl min-h-[120px] flex flex-col justify-between">
+                        <div>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">STATUS ROFIQ (JIWA):</span>
+                            <h3 id="sim-status-title" class="font-bold text-red-500 text-lg font-game">Jiwa Remaja Low-Bat</h3>
+                            <p id="sim-status-desc" class="text-xs text-slate-600 mt-1">Gampang emosi, malas gerak, overthinking tugas, dan hampa. Bawaannya pen rebahan seharian.</p>
+                        </div>
+                        <div id="sim-status-buff" class="mt-3 p-2 rounded-lg bg-red-50 border border-red-100/50 text-[11px] text-red-700 font-semibold flex items-center gap-1.5">
+                            <i class="fa-solid fa-bolt-lightning"></i> Butuh Charge: Dzikir Al-Ma'tsurat & Shalat Dhuha sekarang!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Quests / Checklist Items to increase battery -->
+                <div class="mt-6">
+                    <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">PILIH AKTIVITAS SPIRTUALMU SEPEKAN INI:</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        
+                        <!-- Quest 1 -->
+                        <label class="flex items-center gap-3 p-3 bg-slate-50 hover:bg-teal-50/50 border border-slate-100 rounded-xl cursor-pointer transition-all">
+                            <input type="checkbox" id="chk-matsurat" onchange="calculateBattery()" class="w-5 h-5 rounded border-slate-300 text-questPrimary focus:ring-questPrimary">
+                            <div>
+                                <span class="text-xs font-bold text-slate-800 block">Dzikir Al-Ma'tsurat</span>
+                                <span class="text-[10px] text-slate-500">Minimal 7x sepekan (+15% Energi)</span>
+                            </div>
+                        </label>
+
+                        <!-- Quest 2 -->
+                        <label class="flex items-center gap-3 p-3 bg-slate-50 hover:bg-teal-50/50 border border-slate-100 rounded-xl cursor-pointer transition-all">
+                            <input type="checkbox" id="chk-dhuha" onchange="calculateBattery()" class="w-5 h-5 rounded border-slate-300 text-questPrimary focus:ring-questPrimary">
+                            <div>
+                                <span class="text-xs font-bold text-slate-800 block">Shalat Dhuha</span>
+                                <span class="text-[10px] text-slate-500">Minimal 7x sepekan (+15% Energi)</span>
+                            </div>
+                        </label>
+
+                        <!-- Quest 3 -->
+                        <label class="flex items-center gap-3 p-3 bg-slate-50 hover:bg-teal-50/50 border border-slate-100 rounded-xl cursor-pointer transition-all">
+                            <input type="checkbox" id="chk-rawatib" onchange="calculateBattery()" class="w-5 h-5 rounded border-slate-300 text-questPrimary focus:ring-questPrimary">
+                            <div>
+                                <span class="text-xs font-bold text-slate-800 block">Qobliyah & Ba'diyah</span>
+                                <span class="text-[10px] text-slate-500">Minimal 3x sehari (+15% Energi)</span>
+                            </div>
+                        </label>
+
+                        <!-- Quest 4 -->
+                        <label class="flex items-center gap-3 p-3 bg-slate-50 hover:bg-teal-50/50 border border-slate-100 rounded-xl cursor-pointer transition-all">
+                            <input type="checkbox" id="chk-jamaah" onchange="calculateBattery()" class="w-5 h-5 rounded border-slate-300 text-questPrimary focus:ring-questPrimary">
+                            <div>
+                                <span class="text-xs font-bold text-slate-800 block">Shalat Fardhu Berjamaah</span>
+                                <span class="text-[10px] text-slate-500">5 Waktu di Masjid (+20% Energi)</span>
+                            </div>
+                        </label>
+
+                        <!-- Quest 5 -->
+                        <label class="flex items-center gap-3 p-3 bg-slate-50 hover:bg-teal-50/50 border border-slate-100 rounded-xl cursor-pointer transition-all">
+                            <input type="checkbox" id="chk-puasa" onchange="calculateBattery()" class="w-5 h-5 rounded border-slate-300 text-questPrimary focus:ring-questPrimary">
+                            <div>
+                                <span class="text-xs font-bold text-slate-800 block">Puasa Sunnah Kamis</span>
+                                <span class="text-[10px] text-slate-500">Latih Kontrol Diri (+15% Energi)</span>
+                            </div>
+                        </label>
+
+                        <!-- Quest 6 -->
+                        <label class="flex items-center gap-3 p-3 bg-slate-50 hover:bg-teal-50/50 border border-slate-100 rounded-xl cursor-pointer transition-all">
+                            <input type="checkbox" id="chk-tahajjud" onchange="calculateBattery()" class="w-5 h-5 rounded border-slate-300 text-questPrimary focus:ring-questPrimary">
+                            <div>
+                                <span class="text-xs font-bold text-slate-800 block">Shalat Tahajjud</span>
+                                <span class="text-[10px] text-slate-500">Minimal 2x sepekan (+20% Energi)</span>
+                            </div>
+                        </label>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 6 SENJATA SPIRITUAL CARD EXPANDER -->
+            <div class="bg-white rounded-3xl shadow-xl border border-slate-100 p-6 md:p-8">
+                <div class="mb-6">
+                    <span class="text-xs font-bold text-questSecondary uppercase tracking-widest">KNOWLEDGE BASE:</span>
+                    <h2 class="text-xl md:text-2xl font-bold text-questPrimary font-game flex items-center gap-2 mt-1">
+                        <i class="fa-solid fa-wand-magic-sparkles text-questSecondary"></i> 6 Senjata Spiritual Remaja
+                    </h2>
+                    <p class="text-xs text-slate-500 mt-1">Klik tiap kartu di bawah untuk melihat keutamaan / *buff* dahsyatnya buat kamu!</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    
+                    <!-- Card 1 -->
+                    <div onclick="toggleWeapon(1)" class="quest-card border border-slate-100 hover:border-questLight/30 bg-slate-50 p-4 rounded-2xl cursor-pointer transition-all">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 rounded-full bg-teal-100 text-questPrimary flex items-center justify-center text-sm font-bold">1</span>
+                                <h3 class="font-bold text-slate-800 text-sm md:text-base font-game">Al-Ma'tsurat</h3>
+                            </div>
+                            <i id="weapon-icon-1" class="fa-solid fa-plus text-slate-400 text-xs transition-transform"></i>
+                        </div>
+                        <div id="weapon-content-1" class="hidden mt-3 pt-3 border-t border-slate-200/60 text-xs text-slate-600 space-y-2">
+                            <p class="font-semibold text-questLight"><i class="fa-solid fa-shield"></i> BUFF: Mental Shield Anti-Stress</p>
+                            <p>Melindungi pikiranmu dari *overthinking*, bisikan malas, rasa cemas menghadapi ulangan, dan membuat harimu dipenuhi ketenangan penuh berkah.</p>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div onclick="toggleWeapon(2)" class="quest-card border border-slate-100 hover:border-questLight/30 bg-slate-50 p-4 rounded-2xl cursor-pointer transition-all">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 rounded-full bg-teal-100 text-questPrimary flex items-center justify-center text-sm font-bold">2</span>
+                                <h3 class="font-bold text-slate-800 text-sm md:text-base font-game">Shalat Dhuha</h3>
+                            </div>
+                            <i id="weapon-icon-2" class="fa-solid fa-plus text-slate-400 text-xs transition-transform"></i>
+                        </div>
+                        <div id="weapon-content-2" class="hidden mt-3 pt-3 border-t border-slate-200/60 text-xs text-slate-600 space-y-2">
+                            <p class="font-semibold text-questLight"><i class="fa-solid fa-brain"></i> BUFF: Intelligence Booster</p>
+                            <p>Membantu melancarkan peredaran darah ke otak di pagi hari, melatih fokus, serta bernilai sedekah untuk seluruh 360 persendian tubuhmu.</p>
+                        </div>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div onclick="toggleWeapon(3)" class="quest-card border border-slate-100 hover:border-questLight/30 bg-slate-50 p-4 rounded-2xl cursor-pointer transition-all">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 rounded-full bg-teal-100 text-questPrimary flex items-center justify-center text-sm font-bold">3</span>
+                                <h3 class="font-bold text-slate-800 text-sm md:text-base font-game">Sunnah Rawatib</h3>
+                            </div>
+                            <i id="weapon-icon-3" class="fa-solid fa-plus text-slate-400 text-xs transition-transform"></i>
+                        </div>
+                        <div id="weapon-content-3" class="hidden mt-3 pt-3 border-t border-slate-200/60 text-xs text-slate-600 space-y-2">
+                            <p class="font-semibold text-questLight"><i class="fa-solid fa-circle-plus"></i> BUFF: Bonus Point Multiplier</p>
+                            <p>Shalat Qobliyah dan Ba'diyah menyempurnakan bagian-bagian shalat fardhumu yang kurang khusyuk, plus jaminan istana megah di surga nanti.</p>
+                        </div>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div onclick="toggleWeapon(4)" class="quest-card border border-slate-100 hover:border-questLight/30 bg-slate-50 p-4 rounded-2xl cursor-pointer transition-all">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 rounded-full bg-teal-100 text-questPrimary flex items-center justify-center text-sm font-bold">4</span>
+                                <h3 class="font-bold text-slate-800 text-sm md:text-base font-game">Berjamaah di Masjid</h3>
+                            </div>
+                            <i id="weapon-icon-4" class="fa-solid fa-plus text-slate-400 text-xs transition-transform"></i>
+                        </div>
+                        <div id="weapon-content-4" class="hidden mt-3 pt-3 border-t border-slate-200/60 text-xs text-slate-600 space-y-2">
+                            <p class="font-semibold text-questLight"><i class="fa-solid fa-users"></i> BUFF: 27x Reward &amp; Social Intelligence</p>
+                            <p>Dapat pahala 27x lipat! Selain itu, melatih kedisiplinan beradaptasi dengan waktu, melangkah ke masjid meluruhkan dosa, dan melatih sosialisasi positif.</p>
+                        </div>
+                    </div>
+
+                    <!-- Card 5 -->
+                    <div onclick="toggleWeapon(5)" class="quest-card border border-slate-100 hover:border-questLight/30 bg-slate-50 p-4 rounded-2xl cursor-pointer transition-all">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 rounded-full bg-teal-100 text-questPrimary flex items-center justify-center text-sm font-bold">5</span>
+                                <h3 class="font-bold text-slate-800 text-sm md:text-base font-game">Puasa Kamis</h3>
+                            </div>
+                            <i id="weapon-icon-5" class="fa-solid fa-plus text-slate-400 text-xs transition-transform"></i>
+                        </div>
+                        <div id="weapon-content-5" class="hidden mt-3 pt-3 border-t border-slate-200/60 text-xs text-slate-600 space-y-2">
+                            <p class="font-semibold text-questLight"><i class="fa-solid fa-shield-heart"></i> BUFF: Self-Control &amp; Detox</p>
+                            <p>Merawat kesehatan pencernaan, melatih kesabaran, meluruhkan hawa nafsu toksik (seperti kecanduan game/sosmed), dan pintu Ar-Rayyan di surga menantimu!</p>
+                        </div>
+                    </div>
+
+                    <!-- Card 6 -->
+                    <div onclick="toggleWeapon(6)" class="quest-card border border-slate-100 hover:border-questLight/30 bg-slate-50 p-4 rounded-2xl cursor-pointer transition-all">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 rounded-full bg-teal-100 text-questPrimary flex items-center justify-center text-sm font-bold">6</span>
+                                <h3 class="font-bold text-slate-800 text-sm md:text-base font-game">Tahajjud</h3>
+                            </div>
+                            <i id="weapon-icon-6" class="fa-solid fa-plus text-slate-400 text-xs transition-transform"></i>
+                        </div>
+                        <div id="weapon-content-6" class="hidden mt-3 pt-3 border-t border-slate-200/60 text-xs text-slate-600 space-y-2">
+                            <p class="font-semibold text-questLight"><i class="fa-solid fa-crown"></i> BUFF: VIP Server Access to Heaven</p>
+                            <p>Sepertiga malam terakhir adalah waktu super premium. Mintalah kemudahan menghafal Qur'an, lulus ujian sekolah, dan keberkahan cita-cita langsung kepada Sang Pencipta Jagat Raya.</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+
+        <!-- RIGHT COLUMN: FIQIH ACADEMY & COMMITMENT (5 COLS) -->
+        <section class="lg:col-span-5 flex flex-col gap-8">
+            
+            <!-- FIQIH ACADEMY MINI GAME -->
+            <div class="bg-white rounded-3xl shadow-xl border border-slate-100 p-6">
+                <div class="mb-4">
+                    <span class="bg-amber-100 text-amber-800 text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider">ACADEMY GAME</span>
+                    <h2 class="text-lg md:text-xl font-bold text-questPrimary font-game mt-2 flex items-center gap-2">
+                        <i class="fa-solid fa-graduation-cap text-questSecondary"></i> Fiqih Master Quiz
+                    </h2>
+                    <p class="text-xs text-slate-500">Uji pengetahuan Syarat, Rukun, dan Pembatal ibadah sesuai Madzhab Syafii!</p>
+                </div>
+
+                <!-- Quiz Area -->
+                <div class="bg-slate-50 rounded-2xl p-5 border border-slate-100" id="quiz-box">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest" id="quiz-number-indicator">KASUS 1 DARI 3</span>
+                        <span id="quiz-score-indicator" class="text-xs font-bold text-questLight">Score: 0</span>
+                    </div>
+
+                    <div class="bg-white rounded-xl p-4 border border-slate-100 shadow-sm min-h-[110px] mb-4">
+                        <p class="text-sm text-slate-700 leading-relaxed font-semibold" id="quiz-scenario-text">
+                            Seseorang berwudhu namun di kulit mukanya terhalang minyak rambut yang tebal sehingga air tidak menempel di kulit asli. Bagaimana status wudhunya?
+                        </p>
+                    </div>
+
+                    <!-- Options -->
+                    <div class="space-y-2" id="quiz-options-container">
+                        <button onclick="checkAnswer(true)" class="w-full text-left p-3 rounded-xl border border-slate-200 hover:border-questSecondary/50 bg-white hover:bg-amber-50/20 text-xs font-bold text-slate-700 transition-all flex items-center justify-between">
+                            <span>SAH (Wudhu sah, tidak ada masalah)</span>
+                            <i class="fa-regular fa-circle-check text-slate-300"></i>
+                        </button>
+                        <button onclick="checkAnswer(false)" class="w-full text-left p-3 rounded-xl border border-slate-200 hover:border-questSecondary/50 bg-white hover:bg-amber-50/20 text-xs font-bold text-slate-700 transition-all flex items-center justify-between">
+                            <span>BATAL/TIDAK SAH (Air wudhu wajib menyentuh kulit asli)</span>
+                            <i class="fa-regular fa-circle-xmark text-slate-300"></i>
+                        </button>
+                    </div>
+
+                    <!-- Feedback (Hidden by default) -->
+                    <div id="quiz-feedback" class="hidden mt-4 p-3 rounded-xl text-xs space-y-1">
+                        <p class="font-bold" id="feedback-title">Jawaban Kamu Benar!</p>
+                        <p id="feedback-text" class="text-slate-600">Dalam madzhab Syafii, membasuh wajah adalah rukun. Air wajib mengalir langsung ke kulit tanpa ada penghalang (*hail*).</p>
+                        <button onclick="nextQuiz()" class="mt-3 w-full py-2 bg-questPrimary hover:bg-questLight text-white rounded-lg font-bold text-xs transition-colors">
+                            Pertanyaan Selanjutnya <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUEST TRACKER & COMMITMENT CARD GENERATOR -->
+            <div class="bg-white rounded-3xl shadow-xl border border-slate-100 p-6 flex-grow">
+                <div class="mb-4">
+                    <span class="text-xs font-bold text-questSecondary uppercase tracking-widest">KARTU KOMITMEN:</span>
+                    <h2 class="text-lg md:text-xl font-bold text-questPrimary font-game mt-1 flex items-center gap-2">
+                        <i class="fa-solid fa-file-signature text-questSecondary"></i> Rabbani Contract Card
+                    </h2>
+                    <p class="text-xs text-slate-500">Ikat komitmen jiwamu! Ambil screenshot hasil komitmenmu ini untuk ditunjukkan ke Guru PAI / Orang tuamu.</p>
+                </div>
+
+                <!-- Custom Card Rendering -->
+                <div class="border-2 border-dashed border-questSecondary/40 rounded-2xl p-5 bg-gradient-to-br from-questPrimary to-questDark text-white relative overflow-hidden" id="contract-card-element">
+                    <!-- Abstract Background Graphic -->
+                    <div class="absolute right-[-20px] bottom-[-20px] opacity-10 text-9xl">
+                        <i class="fa-solid fa-certificate"></i>
+                    </div>
+
+                    <div class="flex justify-between items-start pb-3 border-b border-white/10">
+                        <div>
+                            <h4 class="font-bold text-sm tracking-wide font-game text-questSecondary">KONTRAK SANG PEJUANG</h4>
+                            <p class="text-[9px] text-teal-200 tracking-wider">SMP IT BINA INSANI KEDIRI</p>
+                        </div>
+                        <i class="fa-solid fa-id-card text-questSecondary text-lg"></i>
+                    </div>
+
+                    <div class="my-4 space-y-3 text-xs">
+                        <div>
+                            <span class="text-[9px] text-teal-200 block uppercase">NAMA SISWA:</span>
+                            <span id="card-player-name" class="font-bold text-sm text-white">Guest Warrior</span>
+                        </div>
+                        <div>
+                            <span class="text-[9px] text-teal-200 block uppercase">TARGET UTAMA PEKAN INI:</span>
+                            <ul class="space-y-1 text-teal-100 mt-1 font-semibold" id="card-quests-list">
+                                <li class="text-[11px]"><i class="fa-solid fa-chevron-right text-questSecondary"></i> Pilih ibadah di samping!</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <span class="text-[9px] text-teal-200 block uppercase">KOMITMEN DARI HATI:</span>
+                            <p class="italic text-teal-100/90 text-[11px] mt-1">
+                                "Saya beribadah bukan karena disuruh orang tua atau guru, melainkan karena jiwa saya butuh perlindungan, kecerdasan, dan petunjuk Allah setiap detik."
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-3 border-t border-white/10 text-[9px] text-teal-200">
+                        <div>
+                            <span>DIKUNCI PADA:</span>
+                            <span class="block text-white font-bold" id="card-timestamp">Today</span>
+                        </div>
+                        <div class="text-right">
+                            <span>STATUS KONTRAK:</span>
+                            <span class="block text-gameGreen font-bold uppercase"><i class="fa-solid fa-circle-check"></i> AKTIF</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Custom Copy/Download Tip -->
+                <div class="mt-4 p-3 bg-teal-50 border border-teal-100 rounded-xl text-center">
+                    <p class="text-[11px] text-questPrimary font-medium">
+                        <i class="fa-solid fa-camera"></i> <strong>Tip:</strong> Silakan screenshot kartu komitmen di atas dan tunjukkan ke ustadz/ustadzah pendamping halaqahmu!
+                    </p>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="max-w-6xl mx-auto mt-12 px-4 text-center">
+        <p class="text-xs text-slate-400">© 2026 SMP IT Bina Insani Kediri. Hak Cipta Dilindungi.</p>
+        <p class="text-[10px] text-slate-400/80 mt-1">Dibuat penuh cinta untuk membakar semangat ibadah Generasi Rabbani Kediri.</p>
+    </footer>
+
+    <!-- INTERACTIVE APP LOGIC -->
+    <script>
+        // 1. Player Profile State
+        let playerName = "Guest Warrior";
+        
+        // 2. Battery State Details
+        const batteryStates = {
+            low: {
+                title: "Jiwa Remaja Low-Bat (Kritis!)",
+                desc: "Gampang marah, mudah tersinggung, malas diajak ngobrol, ngerjain tugas bawaannya ngantuk, dan hampa. Kebanyakan main game/sosmed tapi ruhani kelaparan.",
+                buff: "<i class='fa-solid fa-bolt-lightning'></i> Butuh Charge: Ambil wudhu & segera Dzikir Al-Ma'tsurat!",
+                class: "from-red-500 to-orange-500",
+                textClass: "text-red-500"
+            },
+            medium: {
+                title: "Energi Cukup (Perlu Booster)",
+                desc: "Fokus belajar kadang ada kadang hilang, mood naik turun, wudhu masih suka buru-buru, dan shalat fardhu masih telat-telat dikit. Masih butuh charger konsisten!",
+                buff: "<i class='fa-solid fa-battery-half'></i> Booster On: Rutinkan Shalat Dhuha & Rawatib pembuka berkah!",
+                class: "from-amber-500 to-yellow-400",
+                textClass: "text-amber-500"
+            },
+            high: {
+                title: "Generasi Rabbani (Full Charge!)",
+                desc: "Tenang lahir batin, diajak ngobrol asyik, belajar gampang paham, hati lapang menghadapi masalah, dan selalu bersemangat menyebarkan kebaikan.",
+                buff: "<i class='fa-solid fa-circle-check'></i> Super Buff Active: Jaminan pertolongan Allah dari segala arah!",
+                class: "from-emerald-500 to-gameGreen",
+                textClass: "text-gameGreen"
+            }
+        };
+
+        // Initialize App on Window Load
+        window.onload = function() {
+            updateTimestamp();
+            calculateBattery();
+            loadQuiz();
+        };
+
+        function updatePlayerName() {
+            const inputVal = document.getElementById('player-name-input').value;
+            playerName = inputVal.trim() !== "" ? inputVal : "Guest Warrior";
+            document.getElementById('card-player-name').innerText = playerName;
+        }
+
+        function updateTimestamp() {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const today = new Date().toLocaleDateString('id-ID', options);
+            document.getElementById('card-timestamp').innerText = today;
+        }
+
+        // Reset all Simulator checkmarks
+        function resetSimulator() {
+            document.getElementById('chk-matsurat').checked = false;
+            document.getElementById('chk-dhuha').checked = false;
+            document.getElementById('chk-rawatib').checked = false;
+            document.getElementById('chk-jamaah').checked = false;
+            document.getElementById('chk-puasa').checked = false;
+            document.getElementById('chk-tahajjud').checked = false;
+            calculateBattery();
+        }
+
+        // Calculate current progress & update UI
+        function calculateBattery() {
+            let pct = 15; // Base energy
+            const quests = [];
+
+            if(document.getElementById('chk-matsurat').checked) {
+                pct += 15;
+                quests.push("Dzikir Al-Ma'tsurat Pagi & Petang");
+            }
+            if(document.getElementById('chk-dhuha').checked) {
+                pct += 15;
+                quests.push("Shalat Dhuha Booster Fokus");
+            }
+            if(document.getElementById('chk-rawatib').checked) {
+                pct += 15;
+                quests.push("Shalat Rawatib Pelindung Shalat");
+            }
+            if(document.getElementById('chk-jamaah').checked) {
+                pct += 20;
+                quests.push("Jamaah 5 Waktu di Masjid");
+            }
+            if(document.getElementById('chk-puasa').checked) {
+                pct += 15;
+                quests.push("Puasa Sunnah Kamis Penahan Nafsu");
+            }
+            if(document.getElementById('chk-tahajjud').checked) {
+                pct += 20;
+                quests.push("Tahajjud VIP Server Access");
+            }
+
+            // Cap at 100
+            if (pct > 100) pct = 100;
+
+            // Update main battery UI elements
+            const bar = document.getElementById('sim-battery-bar');
+            const pctText = document.getElementById('sim-pct');
+            const spiritLevelText = document.getElementById('spirit-level-text');
+            const spiritProgressBar = document.getElementById('spirit-progress-bar');
+
+            bar.style.width = pct + '%';
+            pctText.innerText = pct + '%';
+            spiritProgressBar.style.width = pct + '%';
+
+            // Profile status level title matching
+            if (pct <= 30) {
+                spiritLevelText.innerText = "NOVICE WARRIOR (" + pct + "%)";
+            } else if (pct < 80) {
+                spiritLevelText.innerText = "SOUL GUARDIAN (" + pct + "%)";
+            } else {
+                spiritLevelText.innerText = "RABBANI MASTER (" + pct + "%)";
+            }
+
+            // Report logic and gradient changes
+            let current = batteryStates.low;
+            if(pct > 30 && pct < 80) {
+                current = batteryStates.medium;
+            } else if (pct >= 80) {
+                current = batteryStates.high;
+            }
+
+            bar.className = "h-full bg-gradient-to-r rounded-xl transition-all duration-500 flex items-center justify-center font-bold text-white text-xs md:text-sm drop-shadow " + current.class;
+            
+            const statusTitle = document.getElementById('sim-status-title');
+            statusTitle.innerText = current.title;
+            statusTitle.className = "font-bold text-sm md:text-base font-game " + current.textClass;
+            
+            document.getElementById('sim-status-desc').innerText = current.desc;
+            
+            const statusBuff = document.getElementById('sim-status-buff');
+            statusBuff.innerHTML = current.buff;
+            if (pct <= 30) {
+                statusBuff.className = "mt-3 p-2 rounded-lg bg-red-50 border border-red-100/50 text-[11px] text-red-700 font-semibold flex items-center gap-1.5";
+            } else if (pct < 80) {
+                statusBuff.className = "mt-3 p-2 rounded-lg bg-amber-50 border border-amber-100/50 text-[11px] text-amber-800 font-semibold flex items-center gap-1.5";
+            } else {
+                statusBuff.className = "mt-3 p-2 rounded-lg bg-emerald-50 border border-emerald-100/50 text-[11px] text-emerald-800 font-semibold flex items-center gap-1.5";
+            }
+
+            // Update Contract Card List
+            const cardList = document.getElementById('card-quests-list');
+            cardList.innerHTML = "";
+            if (quests.length === 0) {
+                cardList.innerHTML = `<li class="text-[11px] text-teal-300"><i class="fa-solid fa-circle-exclamation text-questSecondary mr-1"></i> Centang ibadah di simulator di atas!</li>`;
+            } else {
+                quests.forEach(q => {
+                    cardList.innerHTML += `<li class="text-[10px] truncate"><i class="fa-solid fa-circle-check text-gameGreen mr-1"></i> ${q}</li>`;
+                });
+            }
+        }
+
+        // Toggle 6 Weapon Accordions
+        function toggleWeapon(id) {
+            const content = document.getElementById('weapon-content-' + id);
+            const icon = document.getElementById('weapon-icon-' + id);
+
+            if(content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.className = "fa-solid fa-minus text-questSecondary text-xs transition-transform rotate-180";
+            } else {
+                content.classList.add('hidden');
+                icon.className = "fa-solid fa-plus text-slate-400 text-xs transition-transform";
+            }
+        }
+
+        // 3. FIQIH ACADEMY QUIZ DATA
+        const quizData = [
+            {
+                scenario: "Sobat Rabbani membasuh tangan saat wudhu, tapi lupa membasuh siku tangan sebelah kiri. Bagaimana keabsahan wudhunya dalam Madzhab Syafii?",
+                options: [
+                    { text: "Batal / Tidak Sah! Siku termasuk rukun wudhu yang wajib terbasuh.", correct: true },
+                    { text: "Tetap Sah! Karena membasuh siku hanya sunnah saja.", correct: false }
+                ],
+                explanation: "Membasuh kedua tangan beserta kedua siku (*al-mirfaqaini*) adalah rukun wudhu ke-3 dalam Madzhab Syafii. Lewat satu milimeter saja, wudhu tidak sah."
+            },
+            {
+                scenario: "Saat sedang shalat Isya berjamaah di masjid, di rakaat ke-3 kamu secara tidak sengaja menggaruk lengan kirimu sebanyak 3 kali garukan besar secara berturut-turut. Bagaimana shalatmu?",
+                options: [
+                    { text: "Sah! Karena gatal adalah kebutuhan mendesak saat ibadah.", correct: false },
+                    { text: "Batal! Bergerak besar 3 kali berturut-turut di luar gerakan shalat membatalkan shalat.", correct: true }
+                ],
+                explanation: "Dalam Madzhab Syafii, melakukan gerakan besar berturut-turut sebanyak tiga kali atau lebih (*tsalatsu harakatin mutawaliyat*) membatalkan shalat secara langsung."
+            },
+            {
+                scenario: "Ahmad sedang shalat Dhuha di kelas. Tiba-tiba adzan Dzuhur berkumandat. Bolehkah Ahmad membatalkan shalatnya karena berniat mau wudhu lagi untuk jamaah?",
+                options: [
+                    { text: "Boleh! Membatalkan shalat sunnah hukumnya makruh ringan saja.", correct: true },
+                    { text: "Tidak Boleh sama sekali! Shalat sunnah yang sudah dimulai wajib diselesaikan apapun yang terjadi.", correct: false }
+                ],
+                explanation: "Membatalkan shalat sunnah secara sengaja hukumnya adalah makruh dalam madzhab Syafii jika tidak ada udzur syar'i, namun shalat sunnah tersebut tidak berdosa jika dibatalkan."
+            }
+        ];
+
+        let currentQuizIndex = 0;
+        let quizScore = 0;
+
+        function loadQuiz() {
+            const quiz = quizData[currentQuizIndex];
+            document.getElementById('quiz-number-indicator').innerText = `KASUS ${currentQuizIndex + 1} DARI ${quizData.length}`;
+            document.getElementById('quiz-scenario-text').innerText = quiz.scenario;
+            
+            const optionsContainer = document.getElementById('quiz-options-container');
+            optionsContainer.innerHTML = "";
+            
+            quiz.options.forEach((opt, index) => {
+                optionsContainer.innerHTML += `
+                    <button onclick="checkAnswer(${opt.correct})" class="w-full text-left p-3 rounded-xl border border-slate-200 hover:border-questSecondary/50 bg-white hover:bg-amber-50/20 text-xs font-bold text-slate-700 transition-all flex items-center justify-between">
+                        <span>${opt.text}</span>
+                        <i class="fa-regular fa-circle text-slate-300"></i>
+                    </button>
+                `;
+            });
+
+            document.getElementById('quiz-feedback').classList.add('hidden');
+            optionsContainer.classList.remove('pointer-events-none');
+        }
+
+        function checkAnswer(isCorrect) {
+            const optionsContainer = document.getElementById('quiz-options-container');
+            optionsContainer.classList.add('pointer-events-none'); // Disable clicking other options
+
+            const feedback = document.getElementById('quiz-feedback');
+            const fTitle = document.getElementById('feedback-title');
+            const fText = document.getElementById('feedback-text');
+
+            if (isCorrect) {
+                quizScore += 10;
+                fTitle.innerText = "Jawaban Kamu Benar! 🎉";
+                fTitle.className = "font-bold text-gameGreen";
+                feedback.className = "mt-4 p-3 rounded-xl text-xs bg-emerald-50 border border-emerald-100";
+            } else {
+                fTitle.innerText = "Kurang Tepat, Sobat! 😅";
+                fTitle.className = "font-bold text-gameRed";
+                feedback.className = "mt-4 p-3 rounded-xl text-xs bg-red-50 border border-red-100";
+            }
+
+            fText.innerText = quizData[currentQuizIndex].explanation;
+            document.getElementById('quiz-score-indicator').innerText = `Score: ${quizScore}`;
+            feedback.classList.remove('hidden');
+        }
+
+        function nextQuiz() {
+            currentQuizIndex++;
+            if (currentQuizIndex >= quizData.length) {
+                // Reset or end state
+                currentQuizIndex = 0;
+                document.getElementById('quiz-box').innerHTML = `
+                    <div class="text-center py-6">
+                        <i class="fa-solid fa-trophy text-questSecondary text-5xl mb-3"></i>
+                        <h3 class="font-bold text-questPrimary text-base font-game">Kuis Selesai!</h3>
+                        <p class="text-xs text-slate-600 mt-1">Total Score Kamu: <strong>${quizScore} Poin</strong></p>
+                        <button onclick="restartQuiz()" class="mt-4 px-4 py-2 bg-questPrimary hover:bg-questLight text-white rounded-xl font-bold text-xs transition-colors">
+                            Coba Lagi <i class="fa-solid fa-rotate-left"></i>
+                        </button>
+                    </div>
+                `;
+            } else {
+                loadQuiz();
+            }
+        }
+
+        function restartQuiz() {
+            quizScore = 0;
+            currentQuizIndex = 0;
+            document.getElementById('quiz-box').innerHTML = `
+                <div class="flex justify-between items-center mb-3">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest" id="quiz-number-indicator">KASUS 1 DARI 3</span>
+                    <span id="quiz-score-indicator" class="text-xs font-bold text-questLight">Score: 0</span>
+                </div>
+
+                <div class="bg-white rounded-xl p-4 border border-slate-100 shadow-sm min-h-[110px] mb-4">
+                    <p class="text-sm text-slate-700 leading-relaxed font-semibold" id="quiz-scenario-text">
+                        Seseorang berwudhu namun di kulit mukanya terhalang minyak rambut yang tebal sehingga air tidak menempel di kulit asli. Bagaimana status wudhunya?
+                    </p>
+                </div>
+
+                <div class="space-y-2" id="quiz-options-container">
+                    <!-- Dynamic -->
+                </div>
+
+                <div id="quiz-feedback" class="hidden mt-4 p-3 rounded-xl text-xs space-y-1">
+                    <!-- Dynamic -->
+                </div>
+            `;
+            loadQuiz();
+        }
+    </script>
+</body>
+</html>
